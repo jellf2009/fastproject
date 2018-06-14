@@ -1,7 +1,11 @@
 package com.test.controller;
 
+import com.alibaba.fastjson.JSONObject;
+import com.test.pojo.User;
+import com.test.service.TestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -12,15 +16,18 @@ import javax.servlet.http.HttpServletRequest;
 public class TestController {
 
     @Autowired
-    private RedisTemplate redisTemplate;
+    private StringRedisTemplate stringRedisTemplate;
 
-    @RequestMapping("/test")
+    @Autowired
+    private TestService testService;
+
+    @RequestMapping(value = "/test", produces = "text/json;charset=utf-8") //produces 可以保证输出的json数据的编码格式
     @ResponseBody
     public String showTest(HttpServletRequest request) {
-
-        redisTemplate.opsForValue().set("keytest", "goggogoogogogogogoogoggoo");
-        Object keytest = redisTemplate.opsForValue().get("keytest");
-        System.out.println(keytest);
-        return "test OK";
+        User user = testService.findUserById(1L);
+        String result = JSONObject.toJSONString(user);
+        return result;
     }
+
+
 }
