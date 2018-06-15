@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -25,13 +26,11 @@ public class TestController {
     private TestService testService;
 
     @RequestMapping(value = "/test", produces = "text/json;charset=utf-8") //produces 可以保证输出的json数据的编码格式
-    @ResponseBody
-    public String showTest(HttpServletRequest request) {
+    public String showTest(HttpServletRequest request, Model model) {
         logger.info("test test");
         User user = testService.findUserById(1L);
-        String result = JSONObject.toJSONString(user);
-        logger.info("查询得到的用户信息 : " + result);
-        return result;
+        model.addAttribute("user", user);
+        return "hello";
     }
 
 

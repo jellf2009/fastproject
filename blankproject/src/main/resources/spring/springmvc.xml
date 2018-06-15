@@ -17,15 +17,45 @@
     <!-- 启用annotation -->
     <mvc:annotation-driven/>
 
-    <!--<mvc:resources mapping="/css/**" location="/css/"/>-->
-    <!--<mvc:resources mapping="/js/**" location="/js/"/>-->
-    <!--<mvc:resources mapping="/image/**" location="/image/"/>-->
+    <mvc:resources mapping="/css/**" location="/css/"/>
+    <mvc:resources mapping="/js/**" location="/js/"/>
+    <mvc:resources mapping="/images/**" location="/images/"/>
+    <mvc:resources mapping="/fonts/**" location="/fonts/"/>
+    <mvc:resources mapping="*.html" location="/"/>
     <!-- 视图渲染器 -->
-
-    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-        <!-- 前缀 -->
-        <property name="prefix" value="/WEB-INF/jsp/"/>
-        <!-- 后缀 -->
-        <property name="suffix" value=".jsp"/>
+    <bean id="freeMarkerConfigurer"
+          class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+        <property name="templateLoaderPath" value="/WEB-INF/ftl"/>
+        <property name="defaultEncoding" value="utf-8"/>
+        <property name="freemarkerSettings">
+            <props>
+                <prop key="template_update_delay">1</prop>
+                <prop key="locale">zh_CN</prop>
+                <prop key="datetime_format">yyyy-MM-dd</prop><!-- 时间格式化 -->
+                <prop key="date_format">yyyy-MM-dd</prop>
+                <prop key="number_format">#.##</prop>
+            </props>
+        </property>
     </bean>
+
+    <bean id="freeMarkerViewResolver"
+          class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
+        <property name="cache" value="true"/>
+        <property name="prefix" value=""/><!-- 上面已经配了，这里就不用配啦 -->
+        <property name="suffix" value=".ftl"/>
+        <property name="contentType" value="text/html;charset=UTF-8"/>
+        <property name="allowSessionOverride" value="true"/>
+        <property name="allowRequestOverride" value="true"/>
+        <property name="exposeSpringMacroHelpers" value="true"/>
+        <property name="exposeRequestAttributes" value="true"/>
+        <property name="exposeSessionAttributes" value="true"/>
+        <property name="requestContextAttribute" value="request"/>
+    </bean>
+
+    <!--<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        &lt;!&ndash; 前缀 &ndash;&gt;
+        <property name="prefix" value="/WEB-INF/jsp/"/>
+        &lt;!&ndash; 后缀 &ndash;&gt;
+        <property name="suffix" value=".jsp"/>
+    </bean>-->
 </beans>
